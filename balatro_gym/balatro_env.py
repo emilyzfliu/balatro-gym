@@ -3,10 +3,11 @@ from enum import Enum
 
 from .balatro_game import BalatroGame
 
-import gymnasium as gym
-from gymnasium import spaces
+# TODO: uncomment once figure out gymnasium import
+# import gymnasium as gym
+# from gymnasium import spaces
 
-class BalatroEnv(gym.Env):
+class BalatroEnv():#gym.Env):
     metadata = {"render_modes": ["ansi"], "render_fps": 4}
 
     MAX_DECK_SIZE = 52
@@ -17,23 +18,23 @@ class BalatroEnv(gym.Env):
     MAX_DISCARDS = 8
 
     def __init__(self, render_mode=None):
-        self.action_space = spaces.Discrete(self.MAX_ACTIONS)
+        # self.action_space = spaces.Discrete(self.MAX_ACTIONS)
 
-        self.observation_space = spaces.Dict({
-            "deck": spaces.Dict({
-                "cards": spaces.Box(0, 52, shape=(self.MAX_DECK_SIZE,), dtype=int), 
-                "cards_played": spaces.MultiBinary(self.MAX_DECK_SIZE)
-            }),
-            "hand": spaces.Box(0, 51, shape=(self.MAX_HAND_SIZE,), dtype=int),
-            "highlighted": spaces.Box(0, 51, shape=(5,), dtype=int),
-            "blinds": spaces.Box(0, 10000, shape=(3,), dtype=int),
-            "blind_index": spaces.Discrete(3),
-            "hands": spaces.Discrete(self.MAX_HANDS),
-            "discards": spaces.Discrete(self.MAX_DISCARDS),
-            "round_score": spaces.Discrete(100000),
-            "round_hands": spaces.Discrete(self.MAX_HANDS),
-            "round_discards": spaces.Discrete(self.MAX_DISCARDS),
-        })
+        # self.observation_space = spaces.Dict({
+        #     "deck": spaces.Dict({
+        #         "cards": spaces.Box(0, 52, shape=(self.MAX_DECK_SIZE,), dtype=int), 
+        #         "cards_played": spaces.MultiBinary(self.MAX_DECK_SIZE)
+        #     }),
+        #     "hand": spaces.Box(0, 51, shape=(self.MAX_HAND_SIZE,), dtype=int),
+        #     "highlighted": spaces.Box(0, 51, shape=(5,), dtype=int),
+        #     "blinds": spaces.Box(0, 10000, shape=(3,), dtype=int),
+        #     "blind_index": spaces.Discrete(3),
+        #     "hands": spaces.Discrete(self.MAX_HANDS),
+        #     "discards": spaces.Discrete(self.MAX_DISCARDS),
+        #     "round_score": spaces.Discrete(100000),
+        #     "round_hands": spaces.Discrete(self.MAX_HANDS),
+        #     "round_discards": spaces.Discrete(self.MAX_DISCARDS),
+        # })
 
         self.game = BalatroGame()
 

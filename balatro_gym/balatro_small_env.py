@@ -2,10 +2,10 @@ import numpy as np
 
 from .balatro_game import BalatroGame
 
-import gymnasium as gym
-from gymnasium import spaces
+# import gymnasium as gym
+# from gymnasium import spaces
 
-class BalatroSmallEnv(gym.Env):
+class BalatroSmallEnv():#gym.Env):
     metadata = {"render_modes": ["ansi"], "render_fps": 4}
 
     MAX_DECK_SIZE = 52
@@ -16,19 +16,19 @@ class BalatroSmallEnv(gym.Env):
     MAX_DISCARDS = 8
 
     def __init__(self, render_mode=None, chip_threshold=500, reward_dense=True):
-        self.action_space = spaces.Discrete(self.MAX_ACTIONS)
+        # self.action_space = spaces.Discrete(self.MAX_ACTIONS)
 
-        self.observation_space = spaces.Dict({
-            "deck": spaces.Dict({
-                "cards": spaces.Box(0, 52, shape=(self.MAX_DECK_SIZE,), dtype=int), 
-                "cards_played": spaces.MultiBinary(self.MAX_DECK_SIZE)
-            }),
-            "hand": spaces.Box(0, 51, shape=(self.MAX_HAND_SIZE,), dtype=int),
-            "highlighted": spaces.Box(0, 51, shape=(5,), dtype=int),
-            "round_score": spaces.Discrete(100000),
-            "round_hands": spaces.Discrete(self.MAX_HANDS),
-            "round_discards": spaces.Discrete(self.MAX_DISCARDS),
-        })
+        # self.observation_space = spaces.Dict({
+        #     "deck": spaces.Dict({
+        #         "cards": spaces.Box(0, 52, shape=(self.MAX_DECK_SIZE,), dtype=int), 
+        #         "cards_played": spaces.MultiBinary(self.MAX_DECK_SIZE)
+        #     }),
+        #     "hand": spaces.Box(0, 51, shape=(self.MAX_HAND_SIZE,), dtype=int),
+        #     "highlighted": spaces.Box(0, 51, shape=(5,), dtype=int),
+        #     "round_score": spaces.Discrete(100000),
+        #     "round_hands": spaces.Discrete(self.MAX_HANDS),
+        #     "round_discards": spaces.Discrete(self.MAX_DISCARDS),
+        # })
 
         self.chip_threshold = chip_threshold
         self.reward_dense = reward_dense
