@@ -119,6 +119,7 @@ class BalatroGame:
 
         if self.round_score >= self.blinds[self.blind_index]:
             self._end_round()
+            # self.state = self.State.WIN # Simplify for now
         elif self.round_hands == 0:
             self.state = self.State.LOSS
         else:
@@ -150,12 +151,22 @@ class BalatroGame:
         self._start_round()
 
     def _draw_cards(self):
-        self.highlighted_indexes = [0] * self.hand_size
         remaining_cards = [i for i in range(len(self.deck)) if not self.deck[i].played]
+        for i in range(self.hand_size-1, -1, -1):
+            try:
+                if self.highlighted_indexes[i] == 1:
+                    self.hand_indexes.pop(i)
+            except IndexError as e:
+                print(f"Index error: {e}")
+                print(self.highlighted_indexes)
+                print(self.hand_indexes)
+                raise e
 
-        for card_index in np.random.choice(remaining_cards, min(self.hand_size - len(self.hand_indexes), len(remaining_cards)), replace=False):
+        for card_index in np.random.choice(remaining_cards, min(self.hand_size - sum(self.highlighted_indexes), len(remaining_cards)), replace=False):
             self.deck[card_index].played = True
             self.hand_indexes.append(card_index)
+        
+        self.highlighted_indexes = [0] * len(self.hand_indexes)
 
     @staticmethod
     def _evaluate_hand(hand):
