@@ -84,12 +84,16 @@ class BalatroGame:
             for rank in Card.Ranks:
                 self.deck.append(Card(rank, suit))
 
-        self.hand_indexes = []
-        self.highlighted_indexes = []
 
         self.hand_size = 8
         self.hands = 4
         self.discards = 3
+
+        # self.hand_indexes: list of size self.hand_size, indexes refer to the position of the card in the deck
+        # self.highlighted_indexes: list of size self.hand_size, equals 1 if the card is highlighted, 0 otherwise
+
+        self.hand_indexes = []
+        self.highlighted_indexes = [0] * self.hand_size
         
         self.ante = 1
         self.blind_index = 0
@@ -105,12 +109,12 @@ class BalatroGame:
         self._draw_cards()
 
     def highlight_card(self, hand_index: int):
-        self.highlighted_indexes.append(self.hand_indexes.pop(hand_index))
+        self.highlighted_indexes[hand_index] = 1
 
     def play_hand(self):
         self.round_hands -= 1
 
-        score = self._evaluate_hand([self.deck[card_index] for card_index in self.highlighted_indexes])
+        score = self._evaluate_hand([self.deck[self.hand_indexes[i]] for i in range(self.hand_size) if self.highlighted_indexes[i] == 1])
         self.round_score += score
 
         if self.round_score >= self.blinds[self.blind_index]:
@@ -133,7 +137,7 @@ class BalatroGame:
             card.played = False
 
         self.hand_indexes.clear()
-        self.highlighted_indexes.clear()
+        self.highlighted_indexes = [0] * self.hand_size
         self.round_hands = self.hands
         self.round_discards = self.discards
         self.round_score = 0
@@ -146,7 +150,7 @@ class BalatroGame:
         self._start_round()
 
     def _draw_cards(self):
-        self.highlighted_indexes.clear()
+        self.highlighted_indexes = [0] * self.hand_size
         remaining_cards = [i for i in range(len(self.deck)) if not self.deck[i].played]
 
         for card_index in np.random.choice(remaining_cards, min(self.hand_size - len(self.hand_indexes), len(remaining_cards)), replace=False):
@@ -239,4 +243,4 @@ class BalatroGame:
         return ", ".join([str(self.deck[card_index]) for card_index in self.hand_indexes])
 
     def highlighted_to_string(self):
-        return ", ".join([str(self.deck[card_index]) for card_index in self.highlighted_indexes])
+        return ", ".join([str(self.deck[self.hand_indexes[i]]) for i in range(self.hand_size) if self.highlighted_indexes[i] == 1])
